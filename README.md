@@ -1,1 +1,444 @@
-# TinyLink
+
+# 🔗 TinyLink - URL Shortener
+
+A full-stack URL shortener application built with React, Express, and MongoDB. Create custom short links, track click statistics, and manage your URLs efficiently.
+
+**Candidate ID**: Naukri1125
+
+---
+
+## 🌟 Features
+
+✅ **Create Short Links** - Convert long URLs into memorable short codes (6-8 alphanumeric characters)  
+✅ **Custom Codes** - Choose your own custom short code  
+✅ **Click Tracking** - Real-time analytics with total clicks and last clicked timestamp  
+✅ **Link Management** - View, search, sort, and delete links  
+✅ **Stats Dashboard** - Detailed statistics for each short link  
+✅ **Health Monitoring** - System health check and uptime tracking  
+✅ **Responsive Design** - Works seamlessly on desktop and mobile devices  
+✅ **Error Handling** - Comprehensive validation and user-friendly error messages  
+
+---
+
+## 🛠️ Tech Stack
+
+### Backend
+- **Node.js** - Runtime environment
+- **Express.js** - Web framework
+- **MongoDB** - Database
+- **Mongoose** - ODM for MongoDB
+- **CORS** - Cross-origin resource sharing
+- **dotenv** - Environment variable management
+
+### Frontend
+- **React 18** - UI library
+- **React Router** - Client-side routing
+- **Axios** - HTTP client
+- **Vite** - Build tool and dev server
+- **CSS3** - Custom styling with modern features
+
+---
+
+## 📁 Project Structure
+
+```
+tinylink/
+├── backend/
+│   ├── server.js          
+│   ├── package.json       
+│   └── .env                
+│
+└── frontend/
+    ├── src/
+    │   ├── pages/
+    │   │   ├── Dashboard.jsx    
+    │   │   ├── Stats.jsx        
+    │   │   └── Health.jsx       
+    │   ├── services/
+    │   │   └── api.js           
+    │   ├── styles/
+    │   │   ├── Dashboard.css
+    │   │   ├── Stats.css
+    │   │   └── Health.css
+    │   ├── App.jsx              
+    │   ├── App.css              
+    │   └── main.jsx             
+    ├── public/
+    │   └── _redirects           
+    ├── index.html               
+    ├── vite.config.js           
+    ├── package.json             
+```
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18+ installed
+- MongoDB Atlas account (free tier)
+- Git installed
+
+### Backend Setup
+
+1. **Clone and navigate to backend**
+```bash
+cd backend
+```
+
+2. **Install dependencies**
+```bash
+npm install
+```
+
+3. **Configure environment**
+```bash
+# Create .env file
+cp .env
+
+# Edit .env and add MongoDB connection string
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/tinylink
+PORT=5000
+```
+
+4. **Start the server**
+```bash
+npm start
+# For development with auto-reload:
+npm run dev
+```
+
+Backend runs at: `http://localhost:5000`
+
+### Frontend Setup
+
+1. **Navigate to frontend**
+```bash
+cd frontend
+```
+
+2. **Install dependencies**
+```bash
+npm install
+```
+
+3. **Configure environment**
+```bash
+# Create .env file
+cp .env
+
+# Edit .env 
+VITE_API_URL=http://localhost:5000
+```
+
+4. **Start development server**
+```bash
+npm run dev
+```
+
+Frontend runs at: `http://localhost:3000`
+
+---
+
+## 📡 API Documentation
+
+### Base URL
+```
+Development: http://localhost:5000
+```
+
+### Endpoints
+
+#### Health Check
+```http
+GET /healthz
+```
+**Response:**
+```json
+{
+  "ok": true,
+  "version": "1.0",
+  "uptime": 12345.67,
+  "timestamp": "2024-01-01T00:00:00.000Z"
+}
+```
+
+#### Create Link
+```http
+POST /api/links
+Content-Type: application/json
+
+{
+  "shortCode": "docs123",
+  "targetUrl": "https://example.com/very/long/url"
+}
+```
+**Success Response (201):**
+```json
+{
+  "_id": "...",
+  "shortCode": "docs123",
+  "targetUrl": "https://example.com/very/long/url",
+  "clicks": 0,
+  "lastClicked": null,
+  "createdAt": "2024-01-01T00:00:00.000Z"
+}
+```
+**Error Response (409):**
+```json
+{
+  "error": "Short code already exists"
+}
+```
+
+#### Get All Links
+```http
+GET /api/links
+```
+**Response (200):**
+```json
+[
+  {
+    "_id": "...",
+    "shortCode": "docs123",
+    "targetUrl": "https://example.com",
+    "clicks": 42,
+    "lastClicked": "2024-01-01T12:00:00.000Z",
+    "createdAt": "2024-01-01T00:00:00.000Z"
+  }
+]
+```
+
+#### Get Link Stats
+```http
+GET /api/links/:code
+```
+**Response (200):**
+```json
+{
+  "_id": "...",
+  "shortCode": "docs123",
+  "targetUrl": "https://example.com",
+  "clicks": 42,
+  "lastClicked": "2024-01-01T12:00:00.000Z",
+  "createdAt": "2024-01-01T00:00:00.000Z"
+}
+```
+**Error Response (404):**
+```json
+{
+  "error": "Link not found"
+}
+```
+
+#### Delete Link
+```http
+DELETE /api/links/:code
+```
+**Response (200):**
+```json
+{
+  "message": "Link deleted successfully"
+}
+```
+
+#### Redirect
+```http
+GET /:code
+```
+**Response:** 302 Redirect to target URL  
+Increments click count and updates last clicked timestamp
+
+---
+
+## 🎯 Routes
+
+### Frontend Routes
+- `/` - Dashboard (list all links, create new links)
+- `/code/:code` - Stats page for individual link
+- `/healthz` - System health check page
+
+### Backend Routes
+- `GET /healthz` - Health check endpoint
+- `POST /api/links` - Create new short link
+- `GET /api/links` - Get all links
+- `GET /api/links/:code` - Get link statistics
+- `DELETE /api/links/:code` - Delete a link
+- `GET /:code` - Redirect to target URL (302)
+
+---
+
+## ✅ Validation Rules
+
+### Short Code Requirements
+- Length: 6-8 characters
+- Characters: Alphanumeric only (A-Z, a-z, 0-9)
+- Uniqueness: Globally unique across all users
+- Pattern: `/^[A-Za-z0-9]{6,8}$/`
+
+### URL Requirements
+- Must be a valid URL format
+- Must include protocol (http:// or https://)
+- Validated using JavaScript URL constructor
+
+---
+
+## 🎨 UI/UX Features
+
+### States Handled
+- ✅ Loading states (skeleton screens)
+- ✅ Empty states (helpful messages)
+- ✅ Error states (user-friendly error messages)
+- ✅ Success states (confirmations)
+- ✅ Disabled states (form submission)
+
+### User Experience
+- 🔍 **Search/Filter** - Search links by code or URL
+- 🔄 **Sorting** - Sort by created date, clicks, or last clicked
+- 📋 **Copy to Clipboard** - One-click link copying
+- 📱 **Responsive Design** - Mobile-friendly interface
+- ⚡ **Inline Validation** - Real-time form validation
+- 🎯 **Clear Actions** - Intuitive button placement
+- 🌈 **Visual Feedback** - Hover effects and animations
+
+---
+
+## 🔒 Error Handling
+
+### Frontend
+- Network errors handled with try-catch
+- User-friendly error messages
+- Form validation before submission
+- Loading indicators during async operations
+
+### Backend
+- MongoDB connection error handling
+- Duplicate code detection (409 status)
+- Invalid URL validation (400 status)
+- Not found errors (404 status)
+- Server errors logged (500 status)
+
+---
+
+## 🌐 Deployment
+
+### Backend (Render)
+1. Push code to GitHub
+2. Create new Web Service on Render
+3. Connect GitHub repository
+4. Set environment variables (MONGODB_URI, PORT)
+5. Deploy
+
+### Frontend (Netlify)
+1. Push code to GitHub
+2. Create new site on Netlify
+3. Set build command: `npm run build`
+4. Set publish directory: `dist`
+5. Add environment variable: `VITE_API_URL`
+6. Deploy
+
+**Important:** Add `_redirects` file for SPA routing:
+```
+/* /index.html 200
+```
+
+---
+
+##  Testing
+
+### Manual Testing Checklist
+- [ ] Create link with custom code
+- [ ] Create link with existing code (should fail with 409)
+- [ ] Redirect works and increments clicks
+- [ ] Stats page shows correct data
+- [ ] Delete link works
+- [ ] Deleted link returns 404
+- [ ] Health check returns 200
+- [ ] Search/filter functionality
+- [ ] Sort functionality
+- [ ] Responsive design on mobile
+- [ ] Copy to clipboard works
+
+### API Testing with curl
+```bash
+# Health check
+curl https://your-backend.onrender.com/healthz
+
+# Create link
+curl -X POST https://your-backend.onrender.com/api/links \
+  -H "Content-Type: application/json" \
+  -d '{"shortCode":"test123","targetUrl":"https://google.com"}'
+
+# Test redirect
+curl -I https://your-backend.onrender.com/test123
+```
+
+---
+
+## 📊 Database Schema
+
+### Link Model
+```javascript
+{
+  shortCode: String (required, unique, 6-8 alphanumeric)
+  targetUrl: String (required)
+  clicks: Number (default: 0)
+  lastClicked: Date (default: null)
+  createdAt: Date (default: Date.now)
+}
+```
+
+---
+
+## 🔧 Environment Variables
+
+### Backend (.env)
+```env
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/tinylink
+PORT=5000
+BASE_URL= https://tinylink-backend-tuoe.onrender.com
+```
+
+### Frontend (.env)
+```env
+VITE_API_URL= https://tinylink-backend-tuoe.onrender.com
+```
+
+---
+
+## 📝 Key Design Decisions
+
+1. **MongoDB over PostgreSQL**: Chosen for flexible schema and easy cloud hosting
+2. **Vite over CRA**: Faster build times and better development experience
+3. **Axios over Fetch**: Better error handling and request/response interceptors
+4. **Custom CSS over frameworks**: Complete design control and smaller bundle size
+5. **Client-side routing**: Better UX with instant navigation
+6. **UUID approach**: Reliable unique identification for links
+
+---
+
+## 🐛 Known Limitations
+
+- No user authentication (all links are public)
+- No edit functionality (delete and recreate required)
+- No analytics graphs (only raw numbers)
+- No QR code generation
+- No link expiration
+- No rate limiting on API
+
+---
+
+## 🚀 Future Enhancements
+
+- [ ] Analytics dashboard with charts
+- [ ] QR code generation
+- [ ] Link expiration dates
+- [ ] Edit link functionality
+- [ ] Bulk operations
+- [ ] API rate limiting
+- [ ] Link categories/tags
+- [ ] Custom domains
+
+---
+
+**⭐ Thank you for reviewing this project!**
