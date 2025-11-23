@@ -3,8 +3,6 @@
 
 A full-stack URL shortener application built with React, Express, and MongoDB. Create custom short links, track click statistics, and manage your URLs efficiently.
 
-**Candidate ID**: Naukri1125
-
 ## Deployed Link
 
 https://tiny-link-jp.netlify.app
