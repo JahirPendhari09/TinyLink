@@ -5,6 +5,10 @@ A full-stack URL shortener application built with React, Express, and MongoDB. C
 
 **Candidate ID**: Naukri1125
 
+## Deployed Link
+
+https://tiny-link-jp.netlify.app
+
 ---
 
 ## 🌟 Features
@@ -300,93 +304,6 @@ Increments click count and updates last clicked timestamp
 - ⚡ **Inline Validation** - Real-time form validation
 - 🎯 **Clear Actions** - Intuitive button placement
 - 🌈 **Visual Feedback** - Hover effects and animations
-
----
-
-## 🔒 Error Handling
-
-### Frontend
-- Network errors handled with try-catch
-- User-friendly error messages
-- Form validation before submission
-- Loading indicators during async operations
-
-### Backend
-- MongoDB connection error handling
-- Duplicate code detection (409 status)
-- Invalid URL validation (400 status)
-- Not found errors (404 status)
-- Server errors logged (500 status)
-
----
-
-## 🌐 Deployment
-
-### Backend (Render)
-1. Push code to GitHub
-2. Create new Web Service on Render
-3. Connect GitHub repository
-4. Set environment variables (MONGODB_URI, PORT)
-5. Deploy
-
-### Frontend (Netlify)
-1. Push code to GitHub
-2. Create new site on Netlify
-3. Set build command: `npm run build`
-4. Set publish directory: `dist`
-5. Add environment variable: `VITE_API_URL`
-6. Deploy
-
-**Important:** Add `_redirects` file for SPA routing:
-```
-/* /index.html 200
-```
-
----
-
-##  Testing
-
-### Manual Testing Checklist
-- [ ] Create link with custom code
-- [ ] Create link with existing code (should fail with 409)
-- [ ] Redirect works and increments clicks
-- [ ] Stats page shows correct data
-- [ ] Delete link works
-- [ ] Deleted link returns 404
-- [ ] Health check returns 200
-- [ ] Search/filter functionality
-- [ ] Sort functionality
-- [ ] Responsive design on mobile
-- [ ] Copy to clipboard works
-
-### API Testing with curl
-```bash
-# Health check
-curl https://your-backend.onrender.com/healthz
-
-# Create link
-curl -X POST https://your-backend.onrender.com/api/links \
-  -H "Content-Type: application/json" \
-  -d '{"shortCode":"test123","targetUrl":"https://google.com"}'
-
-# Test redirect
-curl -I https://your-backend.onrender.com/test123
-```
-
----
-
-## 📊 Database Schema
-
-### Link Model
-```javascript
-{
-  shortCode: String (required, unique, 6-8 alphanumeric)
-  targetUrl: String (required)
-  clicks: Number (default: 0)
-  lastClicked: Date (default: null)
-  createdAt: Date (default: Date.now)
-}
-```
 
 ---
 
